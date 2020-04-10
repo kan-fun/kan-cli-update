@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func index(c *cli.Context) (err error) {
+func f() (err error) {
 	updateInfo := getUpdateInfos()
 	currentInfo := getCurrentInfos()
 
@@ -50,4 +50,8 @@ func index(c *cli.Context) (err error) {
 	}
 
 	return
+}
+
+func index(c *cli.Context) (err error) {
+	return f()
 }

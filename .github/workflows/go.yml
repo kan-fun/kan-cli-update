@@ -30,8 +30,17 @@ jobs:
             dep ensure
         fi
 
+    - name: Build
+      run: go build -v -ldflags "-X main.version=0.0.0" .
+    
+    - name: Rename
+      run: mv ./kan-cli-update ./kan-update
+
     - name: Test
       run: go test -v .
 
-    - name: Build
-      run: go build -v .
+    - run: ./deploy.sh
+      if: startsWith(github.event.ref, 'refs/tags')
+      env: # Or as an environment variable
+        ACCESSKEY: ${{ secrets.ACCESSKEY }}
+        SECRETKEY: ${{ secrets.SECRETKEY }}
