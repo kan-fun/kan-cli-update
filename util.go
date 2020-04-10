@@ -4,10 +4,14 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os/exec"
+	"path"
 	"runtime"
 	"strings"
+
+	"github.com/kardianos/osext"
 )
 
 type infoStruct struct {
@@ -15,8 +19,22 @@ type infoStruct struct {
 	version  string
 }
 
+func getCurrentDir() (dir string, err error) {
+	dir, err = osext.ExecutableFolder()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return
+}
+
 func getInfoFromExec(filename string) (key string, info *infoStruct) {
-	outputBytes, err := exec.Command(fmt.Sprintf("./%s", filename), "-v").Output()
+	dir, err := getCurrentDir()
+	if err != nil {
+		panic(err)
+	}
+
+	outputBytes, err := exec.Command(path.Join(dir, filename), "-v").Output()
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +99,12 @@ func getUpdateInfos() (result map[string]*infoStruct) {
 }
 
 func getCurrentInfos() (result map[string]*infoStruct) {
-	files, err := ioutil.ReadDir(".")
+	dir, err := getCurrentDir()
+	if err != nil {
+		panic(err)
+	}
+
+	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		panic(err)
 	}

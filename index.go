@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"path"
 	"runtime"
 
 	"github.com/inconshreveable/go-update"
@@ -27,12 +28,17 @@ func f() (err error) {
 	updateInfo := getUpdateInfos()
 	currentInfo := getCurrentInfos()
 
+	dir, err := getCurrentDir()
+	if err != nil {
+		panic(err)
+	}
+
 	for uk, uv := range updateInfo {
 		info := currentInfo[uk]
 
 		if info == nil {
 			fullname := mkFullname(uk)
-			fmt.Printf("😁 Getting %s\n", uk)
+			fmt.Printf("😁 Getting %s...\n", uk)
 
 			panicProgramBytes := []byte(getPanicProgram())
 			err := ioutil.WriteFile(fullname, panicProgramBytes, 0755)
@@ -49,7 +55,7 @@ func f() (err error) {
 			var options update.Options
 
 			options = update.Options{
-				TargetPath: fullname,
+				TargetPath: path.Join(dir, fullname),
 			}
 
 			err = update.Apply(reader, options)
