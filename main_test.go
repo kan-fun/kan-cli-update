@@ -11,11 +11,12 @@ import (
 
 func getOutputString(path string) (outputString string) {
 	outputBytes, err := exec.Command(path, "-v").Output()
+	outputString = strings.TrimSpace(string(outputBytes))
+
 	if err != nil {
+		println(outputString)
 		panic(err)
 	}
-
-	outputString = strings.TrimSpace(string(outputBytes))
 
 	return
 }
