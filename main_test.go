@@ -21,7 +21,7 @@ func getOutputString(path string) (outputString string) {
 
 func TestLinux(t *testing.T) {
 	oldPath := "./test/linux/kan"
-	newPath := "."
+	newPath := "./kan"
 	err := os.Rename(oldPath, newPath)
 	if err != nil {
 		panic(err)
