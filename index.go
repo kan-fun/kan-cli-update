@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/inconshreveable/go-update"
 	"github.com/urfave/cli/v2"
@@ -42,6 +43,10 @@ func f() (err error) {
 
 			err = update.Apply(reader, options)
 			if err != nil {
+				panic(err)
+			}
+
+			if err := os.Chmod(info.fullName, 755); err != nil {
 				panic(err)
 			}
 
