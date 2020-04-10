@@ -40,8 +40,10 @@ func f() (err error) {
 			fullname := mkFullname(uk)
 			fmt.Printf("😁 Getting %s...\n", uk)
 
+			fullPath := path.Join(dir, fullname)
+
 			panicProgramBytes := []byte(getPanicProgram())
-			err := ioutil.WriteFile(fullname, panicProgramBytes, 0755)
+			err := ioutil.WriteFile(fullPath, panicProgramBytes, 0755)
 			if err != nil {
 				return err
 			}
@@ -55,7 +57,7 @@ func f() (err error) {
 			var options update.Options
 
 			options = update.Options{
-				TargetPath: path.Join(dir, fullname),
+				TargetPath: fullPath,
 			}
 
 			err = update.Apply(reader, options)
