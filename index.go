@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"runtime"
 
 	"github.com/inconshreveable/go-update"
@@ -18,6 +19,10 @@ func mkFullname(uk string) string {
 	panic("Not match any OS")
 }
 
+func getPanicProgram() string {
+	return "exit 1"
+}
+
 func f() (err error) {
 	updateInfo := getUpdateInfos()
 	currentInfo := getCurrentInfos()
@@ -26,23 +31,30 @@ func f() (err error) {
 		info := currentInfo[uk]
 
 		if info == nil {
+			fullname := mkFullname(uk)
 			fmt.Printf("😁 Getting %s\n", uk)
+
+			panicProgramBytes := []byte(getPanicProgram())
+			err := ioutil.WriteFile(fullname, panicProgramBytes, 0755)
+			if err != nil {
+				return err
+			}
 
 			reader, err := getBinary(uv.fullName)
 			defer reader.Close()
 			if err != nil {
-				panic(err)
+				return err
 			}
 
 			var options update.Options
 
 			options = update.Options{
-				TargetPath: mkFullname(uk),
+				TargetPath: fullname,
 			}
 
 			err = update.Apply(reader, options)
 			if err != nil {
-				panic(err)
+				return err
 			}
 
 			continue
@@ -58,7 +70,7 @@ func f() (err error) {
 			reader, err := getBinary(uv.fullName)
 			defer reader.Close()
 			if err != nil {
-				panic(err)
+				return err
 			}
 
 			var options update.Options
@@ -71,7 +83,7 @@ func f() (err error) {
 
 			err = update.Apply(reader, options)
 			if err != nil {
-				panic(err)
+				return err
 			}
 
 			fmt.Printf("✅ Update %s\n", uk)
