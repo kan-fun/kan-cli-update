@@ -33,13 +33,16 @@ func TestLinux(t *testing.T) {
 
 	f()
 
+	println("**111*")
 	assert.Equal(t, "kan-update version 0.0.0", getOutputString("./kan-update"))
 
+	println("**222*")
 	newKanOptput := getOutputString("./kan")
 	assert.Equal(t, true, strings.HasPrefix(newKanOptput, "kan version "))
 	assert.NotEqual(t, "kan version 0.0.0", newKanOptput)
 
-	newKanUpdateOptput := getOutputString("./kan")
+	println("**333*")
+	newKanUpdateOptput := getOutputString("./kan-update")
 	assert.Equal(t, true, strings.HasPrefix(newKanUpdateOptput, "kan-update version "))
 	// assert.NotEqual(t, "kan version 0.0.0", newKanOptput)
 }

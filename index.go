@@ -46,7 +46,7 @@ func f() (err error) {
 				panic(err)
 			}
 
-			if err := os.Chmod(info.fullName, 755); err != nil {
+			if err := os.Chmod(info.fullName, 0755); err != nil {
 				panic(err)
 			}
 
