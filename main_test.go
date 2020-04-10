@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/exec"
+	"strings"
 	"testing"
 
 	"github.com/go-playground/assert/v2"
@@ -14,7 +15,7 @@ func getOutputString(path string) (outputString string) {
 		panic(err)
 	}
 
-	outputString = string(outputBytes)
+	outputString = strings.TrimSpace(string(outputBytes))
 
 	return
 }
