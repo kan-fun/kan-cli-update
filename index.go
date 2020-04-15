@@ -85,7 +85,7 @@ func f() (err error) {
 
 			if uk != "kan-update" {
 				options = update.Options{
-					TargetPath: info.fullName,
+					TargetPath: path.Join(dir, info.fullName),
 				}
 			}
 
